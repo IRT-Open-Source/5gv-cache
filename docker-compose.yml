@@ -1,0 +1,34 @@
+version: "3"
+services:
+  train-resolver:
+    container_name: train-resolver
+    build: ../train-resolver
+    ports:
+      - "3003:3003"
+    volumes:
+      - ../train-resolver:/usr/train-resolver
+      - /usr/train-resolver/node_modules
+      - /usr/train-resolver/dist
+    command: [npm, "run", "start:dev"]
+  manifest-transformer:
+    container_name: manifest-transformer
+    build: ../manifest-transformer
+    ports:
+      - "3004:3004"
+    volumes:
+      - ../manifest-transformer:/usr/manifest-transformer
+      - /usr/manifest-transformer/node_modules
+      - /usr/manifest-transformer/dist
+    command: [npm, "run", "start:dev"]
+  cache:
+    container_name: cache
+    build: .
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./cache:/data/cache
+      - ./www:/data/www:ro
+      - ./conf:/etc/nginx:ro
+    command: [nginx-debug, "-g", "daemon off;"]
+    depends_on:
+      - manifest-transformer
