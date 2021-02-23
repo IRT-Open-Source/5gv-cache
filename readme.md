@@ -8,7 +8,7 @@ Reverse proxy cache for video streams.
 
 ## What is this?
 
-The Cache is part of the [platform](https://gitlab.irt.de/5g-victori/platform) for media caching on trains. As Online Cache it is used as a buffer between a VoD service's CDN and the cache one the train. As Offline Cache on trains it is used to serve media streams to client applications on the train even if the train is has no connection to the Intenet and thus ensure service availability and continuity.
+The Cache is part of the [platform](../../../5gv-platform) for media caching on trains. As Online Cache it is used as a buffer between a VoD service's CDN and the cache one the train. As Offline Cache on trains it is used to serve media streams to client applications on the train even if the train is has no connection to the Intenet and thus ensure service availability and continuity.
 
 ## How does it work?
 
@@ -25,11 +25,11 @@ Future requests to the same URL will be served from the cache.
 
 ### Adaptations for ARD-Mediathek
 
-HLS manifests of the ARD-Mediathek only list absolute URLs (or protocol-relative URLs). Since the media streams of ARD-Mediathek are obtained via a large number of domains, a complex configuration of the local DNS on the train would be necessary, if they were to automatically point to the Offline Cache. Therefore, the cache is configured to forward requests to manifest files of HLS streams that are not contained in the cache to the Manifest Transformer. The [Manifest Transformer](https://gitlab.irt.de/5g-victori/manifest-transformer) exchanges all hostnames n the manifests with the hostname of the offline cache. The Manifest Transformer and the corresponding cache configuration can also be used in the same way for other VoD services, where this type of transformation of the stream manifests has advantages.
+HLS manifests of the ARD-Mediathek only list absolute URLs (or protocol-relative URLs). Since the media streams of ARD-Mediathek are obtained via a large number of domains, a complex configuration of the local DNS on the train would be necessary, if they were to automatically point to the Offline Cache. Therefore, the cache is configured to forward requests to manifest files of HLS streams that are not contained in the cache to the Manifest Transformer. The [Manifest Transformer](../../../5gv-manifest-transformer) exchanges all hostnames n the manifests with the hostname of the offline cache. The Manifest Transformer and the corresponding cache configuration can also be used in the same way for other VoD services, where this type of transformation of the stream manifests has advantages.
 
 ## Install, build, run
 
-**Note:** _Typically you would use the `up.sh` script from the [Platform](https://gitlab.irt.de/5g-victori/platform) project to install, build and run this service as part of a composite of docker services. Read on if you intend to run the service directly on your host system._
+**Note:** _Typically you would use the `up.sh` script from the [Platform](../../../5gv-platform) project to install, build and run this service as part of a composite of docker services. Read on if you intend to run the service directly on your host system._
 
 The Cache is based on NGINX. You can install NGINX directly on your host system as shown in the [NGINX docs](https://www.nginx.com/resources/wiki/start/topics/tutorials/install/).
 
@@ -63,12 +63,12 @@ _See TODO comments in [nginx.conf](conf/nginx.conf)_
 
 ### Network throughput
 
-The [Prefetcher](https://gitlab.irt.de/5g-victori/prefetcher) sends a large number of requests to the cache in a short time, whcih can rapidly block the network interface. There are different parameters on different service levels which can optimise the throughput.
+The [Prefetcher](../../../5gv-prefetcher) sends a large number of requests to the cache in a short time, whcih can rapidly block the network interface. There are different parameters on different service levels which can optimise the throughput.
 
 - Configuration of the host sytsem, see for example [link](https://stackoverflow.com/questions/2332741/what-is-the-theoretical-maximum-number-of-open-tcp-connections-that-a-modern-lin)
 - Configuration of the docker environment, see for example [link](https://www.linkedin.com/pulse/ec2-tuning-1m-tcp-connections-using-linux-stephen-blum)
 - Configuration of NGINX, see for example [link](https://www.nginx.com/blog/tuning-nginx/)
-- Configuration of the [Prefetcher](https://gitlab.irt.de/5g-victori/prefetcher) (number of concurrent request sent to the cache)
+- Configuration of the [Prefetcher](../../../5gv-prefetcher) (number of concurrent request sent to the cache)
 
 ### Adaptive Bitrate Streaming
 
